@@ -18,20 +18,17 @@ MISSING_HEADERS=()
 GRADE=0
 
 printMissingHeaders() {
-    echo "The following headers are missing:"
+  echo -e "\033[0;31m The following headers are missing:"
     for str in ${MISSING_HEADERS[@]}; do
-        echo "${str}"
+      echo -e "\033[0;31m ${str}"
     done
 }
-
-
 
 # iterate over the file and check if all the required headers are present
 for str in ${REQUIRED_HEADERS[@]}; do
 
   grep -i "${str}" ./headers.txt
   exitCode="$?"
-  echo "exitcode for $str is $exitCode"
   if [ "${exitCode}" -eq 0 ]; then
    # for every header that is present, increase the grade count.
     GRADE=$((GRADE+1))
@@ -41,8 +38,6 @@ for str in ${REQUIRED_HEADERS[@]}; do
   fi  
   
 done
-
-echo "the grade is: ${GRADE}"
 
 # if the grade count is less than the length of the REQUIRED_HEADERS array
 if [ $GRADE -lt ${#REQUIRED_HEADERS[@]} ]; then
