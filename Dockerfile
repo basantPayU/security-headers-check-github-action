@@ -2,7 +2,7 @@ FROM alpine:3.12
 
 RUN apk add --update coreutils jq bash curl
 
-RUN ["chmod", "+x", "/entrypoint.sh"]
+RUN ["chmod", "+x", "entrypoint.sh"]
 
 COPY entrypoint.sh /entrypoint.sh
 
