@@ -18,8 +18,6 @@ jobs:
       - uses: basantPayU/security-headers@main
         with:
           url: ${{ secrets.SECURITY_HEADERS_URL }}
-          followRedirects: true # This is optional
-          grade: A
 ```
 
 Example output:
