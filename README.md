@@ -1,0 +1,1 @@
+# security-headers-check-github-action
