@@ -6,10 +6,12 @@ if [[ $# == 0 ]]; then
     exit 1
 fi
 
+RESPONSE_HEADER_FILE=./headers.txt
+
 URL=${1}
 
 # call the curl and store the response headers in a file called headers.txt.
-RESPONSE_HEADERS=$(curl -D headers.txt "${URL}" -I )
+RESPONSE_HEADERS=$(curl -D "${RESPONSE_HEADER_FILE}" "${URL}" -I )
 
 # array of required headers and the values/directives they should hold.
 declare -A REQUIRED_HEADERS=(
@@ -21,11 +23,11 @@ declare -A REQUIRED_HEADERS=(
 	['Content-Security-Policy']="connect-src default-src img-src manifest-src media-src object-src script-src style-src" 
 )
 
-#array of missing headers to be filled if any
+#array of missing headers to be filled if any.
 MISSING_HEADERS=()
-# missing CSP directives
+# missing CSP directives.
 MISSING_CSP_DIRECTIVES=()
-#
+# Grade/Present Headers count.
 GRADE=0
 
 printMissingHeaders() {
@@ -41,27 +43,23 @@ printMissingHeaders() {
     done
 }
 
-# TEMP_FILE="sample.txt"
-TEMP_FILE="headers.txt"
-
 checkContentSecurityPolicy() {
   # check if all the directives required for CSP are present
   CSP_DIRECTIVES_PRESENT_COUNT=0
   for i in ${REQUIRED_HEADERS[Content-Security-Policy]}; do
-    # echo " hello "$i
-     grep -i "${i}" "./${TEMP_FILE}" 
-    exitCode="$?"
+    
+    grep -i -q "${i}" "${RESPONSE_HEADER_FILE}"
 
-    if [ "${exitCode}" -eq 0 ]; then
-    # for every header that is present, increase the CSP_DIRECTIVES_PRESENT_COUNT count.
-    CSP_DIRECTIVES_PRESENT_COUNT=$((CSP_DIRECTIVES_PRESENT_COUNT+1))
+    if [ "$?" == 0 ]; then
+      # for every header that is present, increase the CSP_DIRECTIVES_PRESENT_COUNT count.
+      CSP_DIRECTIVES_PRESENT_COUNT=$((CSP_DIRECTIVES_PRESENT_COUNT+1))
     else
-    # for every missing CSP dorective, add the name of the missing directive to the MISSING_CSP_DIRECTIVES array.
-    MISSING_CSP_DIRECTIVES+=("CSP: missing directive ${i}")
+      # for every missing CSP dorective, add the name of the missing directive to the MISSING_CSP_DIRECTIVES array.
+      MISSING_CSP_DIRECTIVES+=("CSP: missing directive ${i}")
     fi
   done
 
-  if [ $CSP_DIRECTIVES_PRESENT_COUNT -lt ${#REQUIRED_HEADERS[@]} ]; then
+  if [ $CSP_DIRECTIVES_PRESENT_COUNT -lt ${#REQUIRED_HEADERS[Content-Security-Policy[@]]} ]; then
     return 1
   else 
     return 0
@@ -70,12 +68,11 @@ checkContentSecurityPolicy() {
 
 # iterate over the file and check if all the required headers are present
 for key in "${!REQUIRED_HEADERS[@]}"; do
-  exitCode=1
   if [ "${key}" == "Content-Security-Policy" ]; then
-  checkContentSecurityPolicy
+    checkContentSecurityPolicy
   else 
     # check if each key(response header) has correct value 
-  grep -i "${key}: ${REQUIRED_HEADERS[$key]}" "./${TEMP_FILE}" 
+    grep -i -q "${key}: ${REQUIRED_HEADERS[$key]}" "${RESPONSE_HEADER_FILE}" 
     
   fi   
 
@@ -92,13 +89,17 @@ done
 
 echo "the grade is: ${GRADE}"
 
+removeTempFile() {
+  rm "${RESPONSE_HEADER_FILE}"
+}
+
 # if the grade count is less than the length of the REQUIRED_HEADERS array
 if [ $GRADE -lt ${#REQUIRED_HEADERS[@]} ]; then
     printMissingHeaders
-    rm ./headers.txt
+    removeTempFile
     exit 1
 else 
    echo "All Security Headers are present"
-   rm ./headers.txt
+   removeTempFile
    exit 0
 fi
