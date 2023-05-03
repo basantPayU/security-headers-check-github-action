@@ -1,6 +1,6 @@
 FROM alpine:3.12
 
-RUN apk add --update coreutils jq bash curl
+RUN apk add --update bash curl
 
 COPY entrypoint.sh /entrypoint.sh
 
