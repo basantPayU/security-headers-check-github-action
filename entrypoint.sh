@@ -30,16 +30,20 @@ MISSING_CSP_DIRECTIVES=()
 # Grade/Present Headers count.
 GRADE=0
 
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+
 printMissingHeaders() {
-  echo -e "\033[0;31m The following headers are missing:"
+  # TODO: this missing headers should be output
+  echo -e " ${RED} The following headers are missing:"
   # Print missing Headers
     for str in "${MISSING_HEADERS[@]}"; do
-      echo -e "\033[0;31m ${str}"
+      echo -e " ${RED} ${str}"
     done
 
    #Print missing CSP directives if any by iterating over the MISSING_CSP_DIRECTIVES array
    for str in "${MISSING_CSP_DIRECTIVES[@]}"; do
-      echo -e "\033[0;31m ${str}"
+      echo -e " ${RED} ${str}"
     done
 }
 
@@ -97,9 +101,11 @@ removeTempFile() {
 if [ $GRADE -lt ${#REQUIRED_HEADERS[@]} ]; then
     printMissingHeaders
     removeTempFile
+    echo "###  ${RED} Security Headers missing" >> $GITHUB_STEP_SUMMARY
     exit 1
 else 
-   echo "All Security Headers are present"
+   echo "${GREEN} All Security Headers are present"
    removeTempFile
+   echo "###  ${GREEN} All Security Headers are present! :rocket:" >> $GITHUB_STEP_SUMMARY
    exit 0
 fi
