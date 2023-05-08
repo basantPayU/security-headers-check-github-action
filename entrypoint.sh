@@ -101,12 +101,12 @@ removeTempFile() {
 if [ $GRADE -lt ${#REQUIRED_HEADERS[@]} ]; then
     printMissingHeaders
     removeTempFile
-    error >> $GITHUB_OUTPUT
+    echo "<RATING>=success" >> $GITHUB_OUTPUT
     exit 1
 else 
    echo "${GREEN} All Security Headers are present"
    removeTempFile
-   success >> $GITHUB_OUTPUT
+   echo "<RATING>=fail" >> $GITHUB_OUTPUT
   #  echo "###  ${GREEN} All Security Headers are present! :rocket:" >> $GITHUB_OUTPUT
    exit 0
 fi
