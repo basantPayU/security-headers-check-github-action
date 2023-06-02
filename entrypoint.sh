@@ -99,8 +99,8 @@ removeTempFile() {
 
 # if the grade count is less than the length of the REQUIRED_HEADERS array
 if [ $GRADE -lt ${#REQUIRED_HEADERS[@]} ]; then
-  printMissingHeaders
-  removeTempFile
+  # printMissingHeaders
+  # removeTempFile
   echo "rating=failure" >> $GITHUB_OUTPUT
   exit 1
     
