@@ -99,11 +99,11 @@ removeTempFile() {
 
 # if the grade count is less than the length of the REQUIRED_HEADERS array
 if [ $GRADE -lt ${#REQUIRED_HEADERS[@]} ]; then
+    echo "rating=failure" >> $GITHUB_OUTPUT
     printMissingHeaders
     removeTempFile
-    echo "rating=failure" >> $GITHUB_OUTPUT
-    exit 0
-    # exit 1
+    # exit 0
+    exit 1
 else 
    echo "${GREEN} All Security Headers are present"
    removeTempFile
