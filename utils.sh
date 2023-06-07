@@ -51,13 +51,8 @@ checkStrictTransportSecurity() {
   # Extract the value of 'Strict-Transport-Security' using text manipulation
   stValue=$(echo "$stHeader" | awk -F: '{ print $2 }' | tr -d '[:space:]')
 
-  # # Define the required policies
+  # The required policies
   requiredPolicies=("max-age" "includeSubDomains" "preload")
-
-  # Convert the required policies into an array
-  # IFS=';' read -ra requiredPolicies <<< "$requiredPolicies"
-
-  # Get the required policies from REQUIRED_HEADERS['Content-Security-Policy']
 
   # Initialize the array to store missing policies
   MISSING_STRICT_TRANSPORT_SECURITY=()
