@@ -24,11 +24,11 @@ printMissingHeaders() {
 
   #Print missing Strict-Transport-security directives if any by iterating over the MISSING_STRICT_TRANSPORT_SECURITY array
   for str in "${MISSING_STRICT_TRANSPORT_SECURITY[@]}"; do
-    echo -e " ${RED} ${str}"
+    echo -e " ${RED} Missing strict-transport-security ${str}"
   done
 
   for str in "${UNALLOWED_PERMISSIONS[@]}"; do
-    echo -e " ${RED} ${str}"
+    echo -e " ${RED} Unallowed Permission ${str}"
   done
 
   for str in "${UNALLOWED_REFFER_POLICY[@]}"; do
@@ -71,12 +71,6 @@ checkStrictTransportSecurity() {
 
   return 0
 }
-
-
-
-
-
-
 
 # Content-Security-Policy: all directives should be present and the default policy should have a directive of self
 checkContentSecurityPolicy() {
