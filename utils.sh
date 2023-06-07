@@ -55,7 +55,7 @@ checkStrictTransportSecurity() {
   requiredPolicies=("max-age" "includeSubDomains" "preload")
 
   # Convert the required policies into an array
-  IFS=';' read -ra requiredPolicies <<< "$requiredPolicies"
+  # IFS=';' read -ra requiredPolicies <<< "$requiredPolicies"
 
   # Get the required policies from REQUIRED_HEADERS['Content-Security-Policy']
 
@@ -64,7 +64,6 @@ checkStrictTransportSecurity() {
 
   # Check if any required policy is missing in stValue
   for policy in "${requiredPolicies[@]}"; do
-     echo "===>" $policy
     if [[ ! "$stValue" == *"$policy"* ]]; then
       MISSING_STRICT_TRANSPORT_SECURITY+=("$policy")
     fi
