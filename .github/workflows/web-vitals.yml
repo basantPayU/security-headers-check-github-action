@@ -1,7 +1,7 @@
 on:
-  pull_request:
-    types: [opened, reopened]
-    branches: [ main, feature/TCWEB-1382 ]
+  # pull_request:
+  #   types: [opened, reopened]
+  #   branches: [ main, feature/TCWEB-1382 ]
   workflow_call:
     inputs:
       url:
