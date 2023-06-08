@@ -1,0 +1,153 @@
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches: [ main, feature/TCWEB-1382 ]
+  workflow_call:
+    inputs:
+      url:
+        description: 'URL to check the Web Vitals for'
+        type: string
+        required: true
+
+jobs:
+  web_vitals_scan_desktop:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.FE_SLACK_WEBHOOK_URL }} #required to slack post
+
+    steps:
+      # - name: slack - GitHub Actions Slack integration
+      #   id: slack-start-notify
+      #   uses: act10ns/slack@v1.6.0
+      #   with:
+      #     status: starting
+      #   if: always() # Pick up events even if the job fails or is canceled. 
+        
+      - uses: actions/checkout@master
+      - run: mkdir  -p ${{ github.workspace }}/tmp/artifacts/desktop
+      - name: Run Lighthouse
+        id: lighthouseCheck
+        uses: foo-software/lighthouse-check-action@master
+        with:
+          prCommentEnabled: true
+          prCommentSaveOld: true
+          gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
+          outputDirectory: ${{ github.workspace }}/tmp/artifacts/desktop
+          urls: "https://sandbox-web.lazypay.in/"
+          device: desktop
+      - name: Upload artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: Lighthouse reports desktop
+          path: ${{ github.workspace }}/tmp/artifacts/desktop
+      - name: Verify Lighthouse Check results
+        uses: foo-software/lighthouse-check-status-action@master
+        with:
+          lighthouseCheckResults: ${{ steps.lighthouseCheck.outputs.lighthouseCheckResults }}
+          minAccessibilityScore: "85"
+          minBestPracticesScore: "85"
+          minPerformanceScore: "85"
+          minProgressiveWebAppScore: "85"
+          minSeoScore: "85"      
+      # - name: slack - GitHub Actions Slack integration
+      #   id: slack-notify
+      #   uses: act10ns/slack@v1.6.0
+      #   with:
+      #     status: ${{ job.status }}
+      #     steps: ${{ toJson(steps) }}
+      #   if: always() # Pick up events even if the job fails or is canceled. 
+
+  web_vitals_scan_mobile:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.FE_SLACK_WEBHOOK_URL }} #required to slack post
+
+    steps:
+      # - name: slack - GitHub Actions Slack integration
+      #   id: slack-start-notify
+      #   uses: act10ns/slack@v1.6.0
+      #   with:
+      #     status: starting
+      #   if: always() # Pick up events even if the job fails or is canceled. 
+        
+      - uses: actions/checkout@master
+      - run: mkdir  -p ${{ github.workspace }}/tmp/artifacts/mobile
+      - name: Run Lighthouse
+        id: lighthouseCheckMobile
+        uses: foo-software/lighthouse-check-action@master
+        with:
+          prCommentEnabled: true
+          prCommentSaveOld: true
+          gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
+          outputDirectory: ${{ github.workspace }}/tmp/artifacts/mobile
+          urls: "https://sandbox-web.lazypay.in/"
+          device: mobile
+      - name: Upload artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: Lighthouse reports mobile
+          path: ${{ github.workspace }}/tmp/artifacts/mobile
+      - name: Verify Lighthouse Check results
+        uses: foo-software/lighthouse-check-status-action@master
+        with:
+          lighthouseCheckResults: ${{ steps.lighthouseCheckMobile.outputs.lighthouseCheckResults }}
+          minAccessibilityScore: "55"
+          minBestPracticesScore: "55"
+          minPerformanceScore: "55"
+          minProgressiveWebAppScore: "55"
+          minSeoScore: "55"      
+      # - name: slack - GitHub Actions Slack integration
+      #   id: slack-notify
+      #   uses: act10ns/slack@v1.6.0
+      #   with:
+      #     status: ${{ job.status }}
+      #     steps: ${{ toJson(steps) }}
+      #   if: always() # Pick up events even if the job fails or is canceled.
+  add-lighthouse-badges:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run NPM Command
+        run: npm -g lighthouse-badges
+        
+      - name: Run Lighthouse Badges
+        run: npx lighthouse-badges --url https://sandbox-web.lazypay.in/ -o lighthouse_test_results     
+  # lighthouse_badges:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 16
+
+  #     - name: Install Lighthouse Badges globally
+  #       run: npm install -g lighthouse-badges
+
+  #     - name: Install project dependencies
+  #       run: npm install
+
+  #     - name: Run Lighthouse Badges
+  #       run: npx lighthouse-badges --url https://www.youtube.com/  -o README.md    
+  
+  
+  
