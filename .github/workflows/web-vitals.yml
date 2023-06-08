@@ -36,7 +36,7 @@ jobs:
           gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           outputDirectory: ${{ github.workspace }}/tmp/artifacts/desktop
-          urls: "https://sandbox-web.lazypay.in/"
+          urls: https://www.payufin.in/
           device: desktop
       - name: Upload artifacts
         uses: actions/upload-artifact@master
@@ -86,7 +86,7 @@ jobs:
           gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           outputDirectory: ${{ github.workspace }}/tmp/artifacts/mobile
-          urls: "https://sandbox-web.lazypay.in/"
+          urls: https://www.payufin.in/
           device: mobile
       - name: Upload artifacts
         uses: actions/upload-artifact@master
