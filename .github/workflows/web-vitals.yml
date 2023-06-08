@@ -127,7 +127,7 @@ jobs:
         run: npm -g lighthouse-badges
         
       - name: Run Lighthouse Badges
-        run: npx lighthouse-badges --url https://sandbox-web.lazypay.in/ -o lighthouse_test_results     
+        run: npx lighthouse-badges --url https://www.payufin.in/-o lighthouse_test_results     
   # lighthouse_badges:
   #   runs-on: ubuntu-latest
 
