@@ -125,7 +125,7 @@ jobs:
         run: npm install
 
       - name: Run NPM Command
-        run: npm -g lighthouse-badges
+        run: npm i -g lighthouse-badges
         
       - name: Run Lighthouse Badges
         run: npx lighthouse-badges --url https://www.payufin.in/ -o lighthouse_test_results     
