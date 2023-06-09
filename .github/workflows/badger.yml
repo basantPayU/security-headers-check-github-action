@@ -15,7 +15,7 @@ name: 'Lighthouse-Badger-Default'
 # INPUTS as environmental variables (env) for not manually triggered workflows 
 env:
   URLS: "https://www.payufin.in/"  # URL(s) to be checked e.g. 'https://github.com/sitdisch https://github.com/mythemeway'
-  TOKEN_NAME: lighthouse # target token name; insert only the name never the real value e.g. 'LIGHTHOUSE_BADGER_TOKEN'
+  TOKEN_NAME: LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN # target token name; insert only the name never the real value e.g. 'LIGHTHOUSE_BADGER_TOKEN'
   # If any of the following env is blank, a default value is used instead
   REPO_BRANCH: 'basantPayU/tryout main' # target repository & branch e.g. 'dummy/mytargetrepo master'
   BADGES_ARGS: '-b pagespeed -o lighthouse_results/dark_particle -r' # badge-style '-b {flat,...}', preceding-label '-l "Lighthouse "', output-path '-o lighthouse_results/dummy', save-report '-r', single-badge '-s'
