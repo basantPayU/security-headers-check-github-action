@@ -1,7 +1,4 @@
 on:
-  # pull_request:
-  #   types: [opened, reopened]
-  #   branches: [ main, feature/TCWEB-1382 ]
   workflow_call:
     inputs:
       url:
@@ -36,7 +33,8 @@ jobs:
           gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           outputDirectory: ${{ github.workspace }}/tmp/artifacts/desktop
-          urls: https://www.payufin.in/
+          urls: ${{ inputs.url }}
+          # urls: https://www.payufin.in/
           device: desktop
       - name: Upload artifacts
         uses: actions/upload-artifact@master
@@ -86,7 +84,8 @@ jobs:
           gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           outputDirectory: ${{ github.workspace }}/tmp/artifacts/mobile
-          urls: https://www.payufin.in/
+          # urls: https://www.payufin.in/
+          urls: ${{ inputs.url }}
           device: mobile
       - name: Upload artifacts
         uses: actions/upload-artifact@master
@@ -110,45 +109,6 @@ jobs:
       #     steps: ${{ toJson(steps) }}
       #   if: always() # Pick up events even if the job fails or is canceled.
       
-  add-lighthouse-badges:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run NPM Command
-        run: npm i -g lighthouse-badges
-        
-      - name: Run Lighthouse Badges
-        run: npx lighthouse-badges --url https://www.payufin.in/ -o lighthouse_test_results     
-  # lighthouse_badges:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
-
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 16
-
-  #     - name: Install Lighthouse Badges globally
-  #       run: npm install -g lighthouse-badges
-
-  #     - name: Install project dependencies
-  #       run: npm install
-
-  #     - name: Run Lighthouse Badges
-  #       run: npx lighthouse-badges --url https://www.youtube.com/  -o README.md    
   
   
   
